@@ -1,5 +1,5 @@
 FROM node:20-alpine as base
-WORKDIR /user/src/app
+WORKDIR /usr/src/app
 
 COPY ./package.json ./
 COPY ./package-lock.json ./
