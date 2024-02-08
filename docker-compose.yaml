@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  client:
+    image: client-merntest
+    build: ./client
+    # stdin_open: true
+    env_file:
+      - ./client/.env
+    ports:
+      - "5173:5173"
+    networks:
+      - fullstackapp
+    volumes:
+      - ./client/:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true # Required for hot reloading in some environments
+
+  api-server:
+    image: api-server-merntest
+    build: ./server
+    env_file:
+      - ./server/.env
+    ports:
+      - "3000:3000"
+    networks:
+      - fullstackapp
+    depends_on:
+      - db
+    volumes:
+      - ./server/:/usr/src/app
+      - /usr/src/app/node_modules
+
+    environment:
+      - CHOKIDAR_USEPOLLING=true # Required for hot reloading in some environments
+
+    # environment:
+    #   - MONGO_URI=${MONGO_URI}
+    #   - JWT_SECRET=${JWT_SECRET}
+    #   - PORT=${PORT}
+
+  db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    networks:
+      - fullstackapp
+    volumes:
+      - dbdata:/data/db
+
+networks:
+  fullstackapp:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
