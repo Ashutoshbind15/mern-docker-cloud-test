@@ -1,11 +1,9 @@
 import express from "express";
-import dotenv from "dotenv";
 import corsConfig from "./config/corsConfig.js";
 import cors from "cors";
 import mongoose from "mongoose";
 
 const app = express();
-dotenv.config();
 
 const connectDB = async () => {
   try {
